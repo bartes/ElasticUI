@@ -16,6 +16,7 @@ module elasticui.controllers {
             loaded: false,
             page: 1,
             index: null,
+            type: null,
             loading:false,
             pageCount: 0,
             pageSize: 10,
@@ -51,6 +52,7 @@ module elasticui.controllers {
             $scope.$watch('indexVM.pageSize',() => { this.indexVM.page = 1; this.search() });
             $scope.$watch('indexVM.page', () => this.search());
             $scope.$watch('indexVM.index', () => this.search());
+            $scope.$watch('indexVM.type', () => this.search());
             $scope.$watch('indexVM.query', () => this.search());
             $scope.$watch('indexVM.highlight', () => this.search());
 
@@ -90,6 +92,7 @@ module elasticui.controllers {
 
             var res = this.es.client.search({
                 index: this.indexVM.index,
+                type: this.indexVM.type,
                 size: this.indexVM.pageSize,
                 from: this.indexVM.pageSize * (this.indexVM.page-1),
                 body: request
@@ -121,7 +124,7 @@ module elasticui.controllers {
                 var promiseToAbort = this.searchPromise;
                 this.searchPromise = null;
                 promiseToAbort.abort();
-            }  
+            }
 
             this.indexVM.loading = true;
             this.searchPromise = this.getSearchPromise();

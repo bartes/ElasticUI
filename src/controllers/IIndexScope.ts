@@ -15,6 +15,7 @@
         loading: boolean;
         page: number;
         index: string;
+        type: string;
         pageCount: number;
         pageSize: number;
         results: any;

@@ -181,6 +181,10 @@ var elasticui;
                         indexCtrl.indexVM.index = val;
                     });
                     indexCtrl.indexVM.index = scope.$eval(attrs.euiIndex);
+                    scope.$watch(attrs.euiType, function (val) {
+                        indexCtrl.indexVM.type = val;
+                    });
+                    indexCtrl.indexVM.type = scope.$eval(attrs.euiType);
                 };
                 return directive;
             }
@@ -453,7 +457,13 @@ var elasticui;
         filters.filters.filter('euiTimestamp', TimestampFilter);
     })(filters = elasticui.filters || (elasticui.filters = {}));
 })(elasticui || (elasticui = {}));
-angular.module('elasticui.controllers', []).controller(elasticui.controllers);
+var elasticui;
+(function (elasticui) {
+    var controllers;
+    (function (_controllers) {
+        _controllers.controllers = angular.module('elasticui.controllers', []);
+    })(controllers = elasticui.controllers || (elasticui.controllers = {}));
+})(elasticui || (elasticui = {}));
 var elasticui;
 (function (elasticui) {
     var controllers;
@@ -605,6 +615,7 @@ var elasticui;
                     loaded: false,
                     page: 1,
                     index: null,
+                    type: null,
                     loading: false,
                     pageCount: 0,
                     pageSize: 10,
@@ -643,6 +654,7 @@ var elasticui;
                 });
                 $scope.$watch('indexVM.page', function () { return _this.search(); });
                 $scope.$watch('indexVM.index', function () { return _this.search(); });
+                $scope.$watch('indexVM.type', function () { return _this.search(); });
                 $scope.$watch('indexVM.query', function () { return _this.search(); });
                 $scope.$watch('indexVM.highlight', function () { return _this.search(); });
                 $timeout(function () { return _this.loaded(); }, 200); // TODO: find better way to recognize loading of app
@@ -682,6 +694,7 @@ var elasticui;
                 //console.log("request to ES");
                 var res = this.es.client.search({
                     index: this.indexVM.index,
+                    type: this.indexVM.type,
                     size: this.indexVM.pageSize,
                     from: this.indexVM.pageSize * (this.indexVM.page - 1),
                     body: request
